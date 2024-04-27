@@ -26,6 +26,3 @@ initialCards.forEach((cardValue) => {
   const cardElement = addCard(cardValue, deleteCard);
   cardList.append(cardElement);
 });
-
-Try github vscode
-
