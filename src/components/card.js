@@ -1,4 +1,5 @@
-import { openPopup } from "./modal";
+import { handleImageClick } from "./handleImageClick";
+import { handleLikeClick } from "./handleLikeClick";
 
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
@@ -15,17 +16,9 @@ export function addCard(cardValue, deleteCallback) {
   cardElement.querySelector(".card__title").textContent = cardValue.name;
   deleteButton.addEventListener("click", () => deleteCallback(cardElement));
 
-  cardImage.addEventListener("click", () => {
-    const popupTypeImage = document.querySelector(".popup_type_image");
-    openPopup(popupTypeImage, {
-      src: cardImage.src,
-      caption: cardCaption.textContent,
-    });
-  });
+  handleImageClick(cardImage, cardCaption);
 
-  likeButton.addEventListener("click", (evt) => {
-    evt.target.classList.toggle("card__like-button_is-active");
-  });
+  handleLikeClick(likeButton);
 
   return cardElement;
 }

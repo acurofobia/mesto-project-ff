@@ -3,7 +3,6 @@ import { initialCards } from "./components/cards.js";
 import { addCard } from "./components/card.js";
 import { deleteCard } from "./components/card.js";
 import { openPopup } from "./components/modal.js";
-import { closePopup } from "./components/modal.js";
 import { handleFormSubmit } from "./components/form.js";
 
 // @todo: DOM узлы
@@ -17,7 +16,8 @@ const profileEditPopupButton = profileElement.querySelector(
 const profileAddPopupButton = profileElement.querySelector(
   ".profile__add-button"
 );
-const formElement = document.querySelectorAll(".popup__form");
+const formEditProfile = document.forms["edit-profile"];
+const formAddCard = document.forms["new-place"];
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach((cardValue) => {
@@ -34,11 +34,12 @@ profileEditPopupButton.addEventListener("click", () => {
 });
 
 profileAddPopupButton.addEventListener("click", () =>
-  openPopup(profileAddPopup, { clean: true })
+  openPopup(profileAddPopup)
 );
 
-document.addEventListener("keydown", closePopup);
-
-formElement.forEach((form) =>
-  form.addEventListener("submit", handleFormSubmit)
-);
+formEditProfile.addEventListener("submit", (evt) => {
+  handleFormSubmit(evt, "editProfile");
+});
+formAddCard.addEventListener("submit", (evt) => {
+  handleFormSubmit(evt, "addNewCard");
+});
