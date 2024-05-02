@@ -1,14 +1,28 @@
 import "./pages/index.css";
 import { initialCards } from "./components/cards.js";
-import { addCard } from "./components/card.js";
-import { deleteCard } from "./components/card.js";
-import { openPopup } from "./components/modal.js";
-import { handleFormSubmit } from "./components/form.js";
+import {
+  deleteCard,
+  addCard,
+  handleImageClick,
+  handleLikeClick,
+} from "./components/card.js";
+import {
+  formEditProfile,
+  formAddCard,
+  handleCardFormSubmit,
+  handleProfileFormSubmit,
+} from "./components/form.js";
+import { openPopup, handleProfileEditPopup } from "./components/modal.js";
 
-// @todo: DOM узлы
 export const cardList = document.querySelector(".places__list");
 const profileElement = document.querySelector(".profile");
 const profileEditPopup = document.querySelector(".popup_type_edit");
+const profileEditPopupInputName = profileEditPopup.querySelector(
+  ".popup__input_type_name"
+);
+const profileEditPopupInputDescription = profileEditPopup.querySelector(
+  ".popup__input_type_description"
+);
 const profileAddPopup = document.querySelector(".popup_type_new-card");
 const profileEditPopupButton = profileElement.querySelector(
   ".profile__edit-button"
@@ -16,21 +30,25 @@ const profileEditPopupButton = profileElement.querySelector(
 const profileAddPopupButton = profileElement.querySelector(
   ".profile__add-button"
 );
-const formEditProfile = document.forms["edit-profile"];
-const formAddCard = document.forms["new-place"];
+export let nameAndJobList = {
+  title: document.querySelector(".profile__title").textContent,
+  description: document.querySelector(".profile__description").textContent,
+};
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach((cardValue) => {
-  const cardElement = addCard(cardValue, deleteCard, openPopup);
+  const options = { handleImageClick, handleLikeClick };
+  const cardElement = addCard(cardValue, deleteCard, options);
   cardList.append(cardElement);
 });
 
 profileEditPopupButton.addEventListener("click", () => {
-  const nameAndJobList = [
-    document.querySelector(".profile__title").textContent,
-    document.querySelector(".profile__description").textContent,
-  ];
-  openPopup(profileEditPopup, { nameAndJobList });
+  handleProfileEditPopup({
+    nameAndJobList,
+    name: profileEditPopupInputName,
+    description: profileEditPopupInputDescription,
+    element: profileEditPopup,
+  });
 });
 
 profileAddPopupButton.addEventListener("click", () =>
@@ -38,8 +56,8 @@ profileAddPopupButton.addEventListener("click", () =>
 );
 
 formEditProfile.addEventListener("submit", (evt) => {
-  handleFormSubmit(evt, "editProfile");
+  handleProfileFormSubmit(evt);
 });
 formAddCard.addEventListener("submit", (evt) => {
-  handleFormSubmit(evt, "addNewCard");
+  handleCardFormSubmit(evt);
 });

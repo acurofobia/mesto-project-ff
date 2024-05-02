@@ -1,11 +1,9 @@
-import { openPopup } from "./modal";
-import { cardList } from "../index";
-import { addCard } from "./card";
-import { deleteCard } from "./card";
-import { handlePopupClose } from "./handlePopupClose";
+import { openPopup, handlePopupClose } from "./modal";
+import { cardList, nameAndJobList } from "../index";
+import { addCard, deleteCard, handleImageClick, handleLikeClick } from "./card";
 
-const formEditProfile = document.forms["edit-profile"];
-const formAddCard = document.forms["new-place"];
+export const formEditProfile = document.forms["edit-profile"];
+export const formAddCard = document.forms["new-place"];
 const nameInput = formEditProfile.querySelector(".popup__input_type_name");
 const jobInput = formEditProfile.querySelector(
   ".popup__input_type_description"
@@ -15,18 +13,20 @@ const cardLinkInput = formAddCard.querySelector(".popup__input_type_url");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
-export function handleFormSubmit(evt, options) {
-  if (options === "editProfile") {
-    evt.preventDefault();
-    profileTitle.textContent = nameInput.value;
-    profileDescription.textContent = jobInput.value;
-    handlePopupClose(evt);
-  }
-  if (options === "addNewCard") {
-    evt.preventDefault();
-    const cardValue = { name: cardNameInput.value, link: cardLinkInput.value };
-    cardList.prepend(addCard(cardValue, deleteCard, openPopup));
-    evt.target.reset();
-    handlePopupClose(evt);
-  }
+export function handleProfileFormSubmit(evt) {
+  evt.preventDefault();
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = jobInput.value;
+  nameAndJobList.title = nameInput.value;
+  nameAndJobList.description = jobInput.value;
+  handlePopupClose(evt);
+}
+
+export function handleCardFormSubmit(evt) {
+  evt.preventDefault();
+  const cardValue = { name: cardNameInput.value, link: cardLinkInput.value };
+  const options = { handleImageClick, handleLikeClick };
+  cardList.prepend(addCard(cardValue, deleteCard, options));
+  evt.target.reset();
+  handlePopupClose(evt);
 }
