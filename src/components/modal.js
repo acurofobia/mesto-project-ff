@@ -10,19 +10,6 @@ export function closePopup(element) {
   document.removeEventListener("keydown", handleEscape);
 }
 
-export function handleProfileEditPopup(options) {
-  options.name.value = options.nameAndJobList.title; // заполняю в попапе редактирования профиля имя и описание
-  options.description.value = options.nameAndJobList.description;
-  openPopup(options.element);
-}
-
-export function handleProfileImagePopup(options) {
-  options.image.src = options.src; // заполняю в попапе ссылку на изображение
-  options.image.alt = options.caption;
-  options.description.textContent = options.caption; // заполняю в попапе описание картинки
-  openPopup(options.element);
-}
-
 export function handleEscape(evt) {
   if (evt.key === "Escape") {
     const openedPopup = document.querySelector(".popup_is-opened");

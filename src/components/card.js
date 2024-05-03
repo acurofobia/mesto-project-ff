@@ -1,10 +1,4 @@
-import { handleProfileImagePopup } from "./modal";
-
 const cardTemplate = document.querySelector("#card-template").content;
-const popupTypeImage = document.querySelector(".popup_type_image");
-const popupTypeImageMain = popupTypeImage.querySelector(".popup__image");
-const popupTypeImageDescription =
-  popupTypeImage.querySelector(".popup__caption");
 
 export function addCard(cardValue, deleteCallback, options) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
@@ -27,22 +21,4 @@ export function addCard(cardValue, deleteCallback, options) {
 
 export function deleteCard(card) {
   card.remove();
-}
-
-export function handleImageClick(cardImage, cardCaption) {
-  cardImage.addEventListener("click", () => {
-    handleProfileImagePopup({
-      element: popupTypeImage,
-      src: cardImage.src,
-      caption: cardCaption.textContent,
-      image: popupTypeImageMain,
-      description: popupTypeImageDescription,
-    });
-  });
-}
-
-export function handleLikeClick(likeButton) {
-  likeButton.addEventListener("click", (evt) => {
-    evt.target.classList.toggle("card__like-button_is-active");
-  });
 }

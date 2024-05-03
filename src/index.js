@@ -1,20 +1,21 @@
 import "./pages/index.css";
 import { initialCards } from "./components/cards.js";
-import {
-  deleteCard,
-  addCard,
-  handleImageClick,
-  handleLikeClick,
-} from "./components/card.js";
+import { deleteCard, addCard } from "./components/card.js";
 import {
   formEditProfile,
   formAddCard,
   handleCardFormSubmit,
   handleProfileFormSubmit,
+  profileTitle,
+  profileDescription,
+  cardList,
 } from "./components/form.js";
-import { openPopup, handleProfileEditPopup } from "./components/modal.js";
+import { openPopup } from "./components/modal.js";
 
-export const cardList = document.querySelector(".places__list");
+const popupTypeImage = document.querySelector(".popup_type_image");
+const popupTypeImageMain = popupTypeImage.querySelector(".popup__image");
+const popupTypeImageDescription =
+  popupTypeImage.querySelector(".popup__caption");
 const profileElement = document.querySelector(".profile");
 const profileEditPopup = document.querySelector(".popup_type_edit");
 const profileEditPopupInputName = profileEditPopup.querySelector(
@@ -55,9 +56,38 @@ profileAddPopupButton.addEventListener("click", () =>
   openPopup(profileAddPopup)
 );
 
-formEditProfile.addEventListener("submit", (evt) => {
-  handleProfileFormSubmit(evt);
-});
+formEditProfile.addEventListener("submit", handleProfileFormSubmit);
 formAddCard.addEventListener("submit", (evt) => {
   handleCardFormSubmit(evt);
 });
+
+export function handleImageClick(cardImage, cardCaption) {
+  cardImage.addEventListener("click", () => {
+    handleProfileImagePopup({
+      element: popupTypeImage,
+      src: cardImage.src,
+      caption: cardCaption.textContent,
+      image: popupTypeImageMain,
+      description: popupTypeImageDescription,
+    });
+  });
+}
+
+export function handleLikeClick(likeButton) {
+  likeButton.addEventListener("click", (evt) => {
+    evt.target.classList.toggle("card__like-button_is-active");
+  });
+}
+
+export function handleProfileEditPopup(options) {
+  options.name.value = profileTitle.textContent; // заполняю в попапе редактирования профиля имя и описание
+  options.description.value = profileDescription.textContent;
+  openPopup(options.element);
+}
+
+export function handleProfileImagePopup(options) {
+  options.image.src = options.src; // заполняю в попапе ссылку на изображение
+  options.image.alt = options.caption;
+  options.description.textContent = options.caption; // заполняю в попапе описание картинки
+  openPopup(options.element);
+}
