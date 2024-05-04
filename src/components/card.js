@@ -1,5 +1,11 @@
 const cardTemplate = document.querySelector("#card-template").content;
 
+export function handleLikeClick(likeButton) {
+  likeButton.addEventListener("click", (evt) => {
+    evt.target.classList.toggle("card__like-button_is-active");
+  });
+}
+
 export function addCard(cardValue, deleteCallback, options) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const deleteButton = cardElement.querySelector(".card__delete-button");

@@ -1,6 +1,6 @@
 import { handlePopupClose } from "./modal";
-import { handleImageClick, handleLikeClick } from "../index";
-import { addCard, deleteCard } from "./card";
+import { handleImageClick } from "../index";
+import { addCard, deleteCard, handleLikeClick } from "./card";
 
 export const formEditProfile = document.forms["edit-profile"];
 export const formAddCard = document.forms["new-place"];

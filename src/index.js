@@ -1,6 +1,6 @@
 import "./pages/index.css";
 import { initialCards } from "./components/cards.js";
-import { deleteCard, addCard } from "./components/card.js";
+import { deleteCard, addCard, handleLikeClick } from "./components/card.js";
 import {
   formEditProfile,
   formAddCard,
@@ -31,10 +31,6 @@ const profileEditPopupButton = profileElement.querySelector(
 const profileAddPopupButton = profileElement.querySelector(
   ".profile__add-button"
 );
-export let nameAndJobList = {
-  title: document.querySelector(".profile__title").textContent,
-  description: document.querySelector(".profile__description").textContent,
-};
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach((cardValue) => {
@@ -45,7 +41,6 @@ initialCards.forEach((cardValue) => {
 
 profileEditPopupButton.addEventListener("click", () => {
   handleProfileEditPopup({
-    nameAndJobList,
     name: profileEditPopupInputName,
     description: profileEditPopupInputDescription,
     element: profileEditPopup,
@@ -70,12 +65,6 @@ export function handleImageClick(cardImage, cardCaption) {
       image: popupTypeImageMain,
       description: popupTypeImageDescription,
     });
-  });
-}
-
-export function handleLikeClick(likeButton) {
-  likeButton.addEventListener("click", (evt) => {
-    evt.target.classList.toggle("card__like-button_is-active");
   });
 }
 
