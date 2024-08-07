@@ -8,9 +8,10 @@ import {
   handleProfileFormSubmit,
   profileTitle,
   profileDescription,
-  cardList,
+  cardList
 } from "./components/form.js";
 import { openPopup } from "./components/modal.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
 
 const popupTypeImage = document.querySelector(".popup_type_image");
 const popupTypeImageMain = popupTypeImage.querySelector(".popup__image");
@@ -32,6 +33,15 @@ const profileAddPopupButton = profileElement.querySelector(
   ".profile__add-button"
 );
 
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_active'
+}); 
+
 // @todo: Вывести карточки на страницу
 initialCards.forEach((cardValue) => {
   const options = { handleImageClick, handleLikeClick };
@@ -45,15 +55,32 @@ profileEditPopupButton.addEventListener("click", () => {
     description: profileEditPopupInputDescription,
     element: profileEditPopup,
   });
+  clearValidation(formEditProfile, {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_active'
+  });
 });
 
-profileAddPopupButton.addEventListener("click", () =>
-  openPopup(profileAddPopup)
-);
+profileAddPopupButton.addEventListener("click", () => {
+  openPopup(profileAddPopup);
+});
 
 formEditProfile.addEventListener("submit", handleProfileFormSubmit);
+
 formAddCard.addEventListener("submit", (evt) => {
   handleCardFormSubmit(evt);
+  clearValidation(formAddCard, {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_active'
+  });
 });
 
 export function handleImageClick(cardImage, cardCaption) {
