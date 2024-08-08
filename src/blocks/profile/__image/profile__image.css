@@ -7,6 +7,31 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  position: relative;
+}
+
+.overlay {
+  position: absolute; 
+  cursor: pointer;
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0);
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.overlay:hover .profile__image-logo {
+  transition: 0.3s;
+  display: block;
+}
+
+.profile__image-logo {
+  display: none;
 }
 
 @media screen and (max-width: 740px) {

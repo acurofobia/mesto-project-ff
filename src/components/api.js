@@ -55,6 +55,14 @@ export const unlikeCard = (cardId) => {
   }).then(checkResponse);
 };
 
+export const updateAvatar = (avatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({ avatar })
+  }).then(checkResponse);
+};
+
 function checkResponse(res) {
   if (res.ok) {
     return res.json();

@@ -17,6 +17,9 @@
     <main class="content">
       <section class="profile page__section">
         <div class="profile__image"></div>
+        <div class="overlay profile__image">
+          <img src="<%=require('./images/Pen.svg')%>" alt="Pen logo" class="profile__image-logo">
+        </div>
         <div class="profile__info">
           <h1 class="profile__title"></h1>
           <button class="profile__edit-button" type="button"></button>
@@ -65,10 +68,22 @@
             <input required type="url" id="link" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку">
             <span class="popup__error link-error"></span>
           </div>
-          <button disabled type="submit" class="button popup__button">Сохранить</button>
+          <button disabled type="submit" class="button popup__button">Создать</button>
         </form>
       </div>
     </div>
+    <div class="popup popup_type_change-avatar popup_is-animated">
+      <div class="popup__content">
+        <button type="button" class="popup__close"></button>
+        <h3 class="popup__title">Обновить аватар</h3>
+        <form class="popup__form" name="change-avatar">
+          <div class="popup__wrapper">
+            <input required type="url" id="link-avatar" name="link-avatar" class="popup__input popup__input_type_url_avatar" placeholder="Ссылка на картинку">
+            <span class="popup__error link-avatar-error"></span>
+          </div>
+          <button disabled type="submit" class="button popup__button">Сохранить</button>
+        </form>
+      </div>
     <div class="popup popup_type_image popup_is-animated">
       <div class="popup__content popup__content_content_image">
         <button type="button" class="popup__close"></button>

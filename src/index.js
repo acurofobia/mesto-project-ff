@@ -5,10 +5,12 @@ import {
   formAddCard,
   handleCardFormSubmit,
   handleProfileFormSubmit,
+  handleAvatarFormSubmit,
   profileTitle,
   profileDescription,
   profileImage,
-  cardList
+  cardList,
+  formChangeAvatar
 } from "./components/form.js";
 import { openPopup } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
@@ -33,6 +35,10 @@ const profileEditPopupButton = profileElement.querySelector(
 const profileAddPopupButton = profileElement.querySelector(
   ".profile__add-button"
 );
+const profileChangeAvatarPopup = document.querySelector(".popup_type_change-avatar");
+
+const avatarChangeButton = document.querySelector(".overlay");
+
 let userId = '';
 
 Promise.all([getUserData(), getCards()])
@@ -80,15 +86,27 @@ profileEditPopupButton.addEventListener("click", () => {
   });
 });
 
-profileAddPopupButton.addEventListener("click", () => {
-  openPopup(profileAddPopup);
-});
+avatarChangeButton.addEventListener("click", () => openPopup(profileChangeAvatarPopup));
+
+profileAddPopupButton.addEventListener("click", () => openPopup(profileAddPopup));
 
 formEditProfile.addEventListener("submit", handleProfileFormSubmit);
 
 formAddCard.addEventListener("submit", (evt) => {
   handleCardFormSubmit(evt, userId);
   clearValidation(formAddCard, {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_active'
+  });
+});
+
+formChangeAvatar.addEventListener("submit", (evt) => {
+  handleAvatarFormSubmit(evt);
+  clearValidation(formChangeAvatar, {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
