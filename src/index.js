@@ -1,5 +1,4 @@
 import "./pages/index.css";
-import { initialCards } from "./components/cards.js";
 import { deleteCard, addCard, handleLikeClick } from "./components/card.js";
 import {
   formEditProfile,
@@ -8,10 +7,12 @@ import {
   handleProfileFormSubmit,
   profileTitle,
   profileDescription,
+  profileImage,
   cardList
 } from "./components/form.js";
 import { openPopup } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
+import { getUserData, getCards } from "./components/api.js";
 
 const popupTypeImage = document.querySelector(".popup_type_image");
 const popupTypeImageMain = popupTypeImage.querySelector(".popup__image");
@@ -32,6 +33,19 @@ const profileEditPopupButton = profileElement.querySelector(
 const profileAddPopupButton = profileElement.querySelector(
   ".profile__add-button"
 );
+let userId = '';
+
+Promise.all([getUserData(), getCards()])
+  .then(([userData, cardsData]) => {
+    userId = userData._id;
+    profileTitle.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    profileImage.style.backgroundImage = `url(${userData.avatar})`;
+
+    renderCards(cardsData);
+  })
+  .catch(error => console.log(error));
+
 
 enableValidation({
   formSelector: '.popup__form',
@@ -40,14 +54,15 @@ enableValidation({
   inactiveButtonClass: 'popup__button_disabled',
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_active'
-}); 
-
-// @todo: Вывести карточки на страницу
-initialCards.forEach((cardValue) => {
-  const options = { handleImageClick, handleLikeClick };
-  const cardElement = addCard(cardValue, deleteCard, options);
-  cardList.append(cardElement);
 });
+
+const renderCards = (cardsData) => {
+  cardsData.forEach((cardValue) => {
+    const options = { handleImageClick, handleLikeClick, userId };
+    const cardElement = addCard(cardValue, deleteCard, options);
+    cardList.append(cardElement);
+  })
+};
 
 profileEditPopupButton.addEventListener("click", () => {
   handleProfileEditPopup({
@@ -72,7 +87,7 @@ profileAddPopupButton.addEventListener("click", () => {
 formEditProfile.addEventListener("submit", handleProfileFormSubmit);
 
 formAddCard.addEventListener("submit", (evt) => {
-  handleCardFormSubmit(evt);
+  handleCardFormSubmit(evt, userId);
   clearValidation(formAddCard, {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
