@@ -1,5 +1,4 @@
-import { handleImageClick } from "./card";
-import { addCard, deleteCard, handleLikeClick } from "./card";
+import { addCard, deleteCard } from "./card";
 import { updateProfileData, addNewCard, updateAvatar } from "./api";
 import { closePopup } from "./modal";
 
