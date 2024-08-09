@@ -1,7 +1,7 @@
-import { handlePopupClose } from "./modal";
-import { handleImageClick } from "../index";
+import { handleImageClick } from "./card";
 import { addCard, deleteCard, handleLikeClick } from "./card";
 import { updateProfileData, addNewCard, updateAvatar } from "./api";
+import { closePopup } from "./modal";
 
 export const formEditProfile = document.forms["edit-profile"];
 export const formAddCard = document.forms["new-place"];
@@ -35,10 +35,13 @@ export function handleProfileFormSubmit(evt) {
     .then((data) => {
       profileTitle.textContent = data.name;
       profileDescription.textContent = data.about
-      handlePopupClose(evt);
     })
     .catch(error => console.log(error))
-    .finally(() => setLoading(false, formEditProfileButton, text))
+    .finally(() => {
+      setLoading(false, formEditProfileButton, text);
+      const openedPopup = document.querySelector(".popup_is-opened");
+      closePopup(openedPopup);
+    })
 }
 
 export function handleCardFormSubmit(evt, userId) {
@@ -48,13 +51,18 @@ export function handleCardFormSubmit(evt, userId) {
   addNewCard(cardNameInput.value, cardLinkInput.value)
     .then((data) => {
       const cardValue = data;
-      const options = { handleImageClick, handleLikeClick, userId };
-      cardList.prepend(addCard(cardValue, deleteCard, options));
+      const options = { userId };
+      const cardElement = addCard(cardValue, deleteCard, options);
+      cardList.prepend(cardElement);
+
       evt.target.reset();
-      handlePopupClose(evt);
     })
     .catch(error => console.log(error))
-    .finally(() => setLoading(false, formAddCardButton, text))
+    .finally(() => {
+      setLoading(false, formAddCardButton, text);
+      const openedPopup = document.querySelector(".popup_is-opened");
+      closePopup(openedPopup);
+    })
 }
 
 export function handleAvatarFormSubmit(evt) {
@@ -65,8 +73,11 @@ export function handleAvatarFormSubmit(evt) {
     .then((data) => {
       profileImage.style.backgroundImage = `url(${data.avatar})`;
       evt.target.reset();
-      handlePopupClose(evt);
     })
     .catch(error => console.log(error))
-    .finally(() => setLoading(false, formChangeAvatarButton, text))
+    .finally(() => {
+      setLoading(false, formChangeAvatarButton, text);
+      const openedPopup = document.querySelector(".popup_is-opened");
+      closePopup(openedPopup);
+    })
 }

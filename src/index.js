@@ -1,5 +1,12 @@
+//Проблема при открытии модального окна с большой картинкой заключалась
+//в том, что я случайно поместил div элемент с классом popup_type_image
+//внутрь другого элемента, поэтому картинка не появлялась,
+//вынес этот элемент на свое место. теперь все работает
+
+//Так-же поработал над вашими замечаниями
+
 import "./pages/index.css";
-import { deleteCard, addCard, handleLikeClick } from "./components/card.js";
+import { renderCards } from "./components/card.js";
 import {
   formEditProfile,
   formAddCard,
@@ -9,17 +16,12 @@ import {
   profileTitle,
   profileDescription,
   profileImage,
-  cardList,
   formChangeAvatar
 } from "./components/form.js";
 import { openPopup } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
 import { getUserData, getCards } from "./components/api.js";
 
-const popupTypeImage = document.querySelector(".popup_type_image");
-const popupTypeImageMain = popupTypeImage.querySelector(".popup__image");
-const popupTypeImageDescription =
-  popupTypeImage.querySelector(".popup__caption");
 const profileElement = document.querySelector(".profile");
 const profileEditPopup = document.querySelector(".popup_type_edit");
 const profileEditPopupInputName = profileEditPopup.querySelector(
@@ -48,7 +50,7 @@ Promise.all([getUserData(), getCards()])
     profileDescription.textContent = userData.about;
     profileImage.style.backgroundImage = `url(${userData.avatar})`;
 
-    renderCards(cardsData);
+    renderCards(cardsData, userId);
   })
   .catch(error => console.log(error));
 
@@ -61,14 +63,6 @@ enableValidation({
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_active'
 });
-
-const renderCards = (cardsData) => {
-  cardsData.forEach((cardValue) => {
-    const options = { handleImageClick, handleLikeClick, userId };
-    const cardElement = addCard(cardValue, deleteCard, options);
-    cardList.append(cardElement);
-  })
-};
 
 profileEditPopupButton.addEventListener("click", () => {
   handleProfileEditPopup({
@@ -116,27 +110,8 @@ formChangeAvatar.addEventListener("submit", (evt) => {
   });
 });
 
-export function handleImageClick(cardImage, cardCaption) {
-  cardImage.addEventListener("click", () => {
-    handleProfileImagePopup({
-      element: popupTypeImage,
-      src: cardImage.src,
-      caption: cardCaption.textContent,
-      image: popupTypeImageMain,
-      description: popupTypeImageDescription,
-    });
-  });
-}
-
 export function handleProfileEditPopup(options) {
   options.name.value = profileTitle.textContent; // заполняю в попапе редактирования профиля имя и описание
   options.description.value = profileDescription.textContent;
-  openPopup(options.element);
-}
-
-export function handleProfileImagePopup(options) {
-  options.image.src = options.src; // заполняю в попапе ссылку на изображение
-  options.image.alt = options.caption;
-  options.description.textContent = options.caption; // заполняю в попапе описание картинки
   openPopup(options.element);
 }

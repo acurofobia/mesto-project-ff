@@ -1,6 +1,12 @@
 import { removeCardFromPage, likeCard as likeCardApi, unlikeCard as unlikeCardApi } from "./api";
+import { cardList } from "./form";
+import { openPopup } from "./modal";
 
 const cardTemplate = document.querySelector("#card-template").content;
+const popupTypeImage = document.querySelector(".popup_type_image");
+const popupTypeImageMain = popupTypeImage.querySelector(".popup__image");
+const popupTypeImageDescription =
+  popupTypeImage.querySelector(".popup__caption");
 
 export function handleLikeClick(likeButton, cardValue, userId, likeCounter) {
   likeButton.addEventListener("click", (evt) => {
@@ -12,6 +18,33 @@ export function handleLikeClick(likeButton, cardValue, userId, likeCounter) {
     }
   });
 }
+
+export function handleImageClick(cardImage, cardCaption) {
+  cardImage.addEventListener("click", () => {
+    handleProfileImagePopup({
+      element: popupTypeImage,
+      src: cardImage.src,
+      caption: cardCaption.textContent,
+      image: popupTypeImageMain,
+      description: popupTypeImageDescription,
+    });
+  });
+}
+
+function handleProfileImagePopup(options) {
+  options.image.src = options.src; // заполняю в попапе ссылку на изображение
+  options.image.alt = options.caption;
+  options.description.textContent = options.caption; // заполняю в попапе описание картинки
+  openPopup(options.element);
+}
+
+export const renderCards = (cardsData, userId) => {
+  cardsData.forEach((cardValue) => {
+    const options = { userId };
+    const cardElement = addCard(cardValue, deleteCard, options);
+    cardList.append(cardElement);
+  })
+};
 
 export function likeCard(options) {
   likeCardApi(options.cardId)
@@ -48,9 +81,6 @@ export function addCard(cardValue, deleteCallback, options) {
   likeCounter.textContent = cardValue.likes.length;
   cardElement.querySelector(".card__title").textContent = cardValue.name;
 
-  console.log(cardValue);
-  console.log(cardValue.owner._id)
-
   if(cardValue.likes.some((item) => {return item._id == options.userId})) {
     likeButton.classList.add("card__like-button_is-active");
   }
@@ -61,9 +91,19 @@ export function addCard(cardValue, deleteCallback, options) {
     deleteButton.style.display = 'none';
   }
 
-  options.handleImageClick(cardImage, cardCaption);
+  cardImage.addEventListener("click", () => {
+    handleProfileImagePopup({
+      element: popupTypeImage,
+      src: cardImage.src,
+      caption: cardCaption.textContent,
+      image: popupTypeImageMain,
+      description: popupTypeImageDescription,
+    });
+  });
 
-  options.handleLikeClick(likeButton, cardValue, options.userId, likeCounter);
+  // handleImageClick(cardImage, cardCaption);
+
+  handleLikeClick(likeButton, cardValue, options.userId, likeCounter);
 
   return cardElement;
 }
