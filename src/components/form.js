@@ -53,14 +53,13 @@ export function handleCardFormSubmit(evt, userId) {
       const options = { userId };
       const cardElement = addCard(cardValue, deleteCard, options);
       cardList.prepend(cardElement);
-
-      evt.target.reset();
     })
     .catch(error => console.log(error))
     .finally(() => {
       setLoading(false, formAddCardButton, text);
       const openedPopup = document.querySelector(".popup_is-opened");
       closePopup(openedPopup);
+      evt.target.reset();
     })
 }
 
@@ -71,12 +70,12 @@ export function handleAvatarFormSubmit(evt) {
   updateAvatar(avatarLinkInput.value)
     .then((data) => {
       profileImage.style.backgroundImage = `url(${data.avatar})`;
-      evt.target.reset();
     })
     .catch(error => console.log(error))
     .finally(() => {
       setLoading(false, formChangeAvatarButton, text);
       const openedPopup = document.querySelector(".popup_is-opened");
       closePopup(openedPopup);
+      evt.target.reset();
     })
 }
