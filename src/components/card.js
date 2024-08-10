@@ -1,12 +1,4 @@
 import { removeCardFromPage, likeCard as likeCardApi, unlikeCard as unlikeCardApi } from "./api";
-import { cardList } from "./form";
-import { openPopup } from "./modal";
-
-const cardTemplate = document.querySelector("#card-template").content;
-const popupTypeImage = document.querySelector(".popup_type_image");
-const popupTypeImageMain = popupTypeImage.querySelector(".popup__image");
-const popupTypeImageDescription =
-  popupTypeImage.querySelector(".popup__caption");
 
 export function handleLikeClick(likeButton, cardValue, userId, likeCounter) {
   likeButton.addEventListener("click", (evt) => {
@@ -18,33 +10,6 @@ export function handleLikeClick(likeButton, cardValue, userId, likeCounter) {
     }
   });
 }
-
-export function handleImageClick(cardImage, cardCaption) {
-  cardImage.addEventListener("click", () => {
-    handleProfileImagePopup({
-      element: popupTypeImage,
-      src: cardImage.src,
-      caption: cardCaption.textContent,
-      image: popupTypeImageMain,
-      description: popupTypeImageDescription,
-    });
-  });
-}
-
-function handleProfileImagePopup(options) {
-  options.image.src = options.src; // заполняю в попапе ссылку на изображение
-  options.image.alt = options.caption;
-  options.description.textContent = options.caption; // заполняю в попапе описание картинки
-  openPopup(options.element);
-}
-
-export const renderCards = (cardsData, userId) => {
-  cardsData.forEach((cardValue) => {
-    const options = { userId };
-    const cardElement = addCard(cardValue, deleteCard, options);
-    cardList.append(cardElement);
-  })
-};
 
 export function likeCard(options) {
   likeCardApi(options.cardId)
@@ -69,7 +34,7 @@ function updateCardLikes(options, data) {
 }
 
 export function addCard(cardValue, deleteCallback, options) {
-  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
+  const cardElement = options.cardTemplate.querySelector(".card").cloneNode(true);
   const deleteButton = cardElement.querySelector(".card__delete-button");
   const likeButton = cardElement.querySelector(".card__like-button");
   const cardImage = cardElement.querySelector(".card__image");
@@ -92,16 +57,14 @@ export function addCard(cardValue, deleteCallback, options) {
   }
 
   cardImage.addEventListener("click", () => {
-    handleProfileImagePopup({
-      element: popupTypeImage,
+    options.handleProfileImagePopup({
+      element: options.popupTypeImage,
       src: cardImage.src,
       caption: cardCaption.textContent,
-      image: popupTypeImageMain,
-      description: popupTypeImageDescription,
+      image: options.popupTypeImageMain,
+      description: options.popupTypeImageDescription,
     });
   });
-
-  // handleImageClick(cardImage, cardCaption);
 
   handleLikeClick(likeButton, cardValue, options.userId, likeCounter);
 
@@ -111,7 +74,7 @@ export function addCard(cardValue, deleteCallback, options) {
 export function deleteCard(card, cardId) {
   if (cardId) {
     removeCardFromPage(cardId)
+      .then(card.remove())
       .catch(error => console.log(error))
   }
-  card.remove();
 }

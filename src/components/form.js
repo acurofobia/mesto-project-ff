@@ -1,6 +1,7 @@
 import { addCard, deleteCard } from "./card";
 import { updateProfileData, addNewCard, updateAvatar } from "./api";
 import { closePopup } from "./modal";
+import { clearValidation } from "./validation";
 
 export const formEditProfile = document.forms["edit-profile"];
 export const formAddCard = document.forms["new-place"];
@@ -32,34 +33,49 @@ export function handleProfileFormSubmit(evt) {
   setLoading(true, formEditProfileButton);
   updateProfileData(nameInput.value, jobInput.value)
     .then((data) => {
+      clearValidation(formEditProfile, {
+        formSelector: '.popup__form',
+        inputSelector: '.popup__input',
+        submitButtonSelector: '.popup__button',
+        inactiveButtonClass: 'popup__button_disabled',
+        inputErrorClass: 'popup__input_type_error',
+        errorClass: 'popup__error_active'
+      });
       profileTitle.textContent = data.name;
       profileDescription.textContent = data.about
+      const openedPopup = document.querySelector(".popup_is-opened");
+      closePopup(openedPopup);
     })
     .catch(error => console.log(error))
     .finally(() => {
       setLoading(false, formEditProfileButton, text);
-      const openedPopup = document.querySelector(".popup_is-opened");
-      closePopup(openedPopup);
     })
 }
 
-export function handleCardFormSubmit(evt, userId) {
+export function handleCardFormSubmit(evt, options) {
   evt.preventDefault();
   const text = evt.target.querySelector(".button").textContent;
   setLoading(true, formAddCardButton);
   addNewCard(cardNameInput.value, cardLinkInput.value)
     .then((data) => {
+      clearValidation(formAddCard, {
+        formSelector: '.popup__form',
+        inputSelector: '.popup__input',
+        submitButtonSelector: '.popup__button',
+        inactiveButtonClass: 'popup__button_disabled',
+        inputErrorClass: 'popup__input_type_error',
+        errorClass: 'popup__error_active'
+      });
       const cardValue = data;
-      const options = { userId };
       const cardElement = addCard(cardValue, deleteCard, options);
       cardList.prepend(cardElement);
+      const openedPopup = document.querySelector(".popup_is-opened");
+      closePopup(openedPopup);
+      evt.target.reset();
     })
     .catch(error => console.log(error))
     .finally(() => {
       setLoading(false, formAddCardButton, text);
-      const openedPopup = document.querySelector(".popup_is-opened");
-      closePopup(openedPopup);
-      evt.target.reset();
     })
 }
 
@@ -69,13 +85,21 @@ export function handleAvatarFormSubmit(evt) {
   setLoading(true, formChangeAvatarButton);
   updateAvatar(avatarLinkInput.value)
     .then((data) => {
+      clearValidation(formChangeAvatar, {
+        formSelector: '.popup__form',
+        inputSelector: '.popup__input',
+        submitButtonSelector: '.popup__button',
+        inactiveButtonClass: 'popup__button_disabled',
+        inputErrorClass: 'popup__input_type_error',
+        errorClass: 'popup__error_active'
+      });
       profileImage.style.backgroundImage = `url(${data.avatar})`;
+      const openedPopup = document.querySelector(".popup_is-opened");
+      closePopup(openedPopup);
+      evt.target.reset();
     })
     .catch(error => console.log(error))
     .finally(() => {
       setLoading(false, formChangeAvatarButton, text);
-      const openedPopup = document.querySelector(".popup_is-opened");
-      closePopup(openedPopup);
-      evt.target.reset();
     })
 }
