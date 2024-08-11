@@ -13,7 +13,7 @@ import {
   formChangeAvatar
 } from "./components/form.js";
 import { openPopup } from "./components/modal.js";
-import { enableValidation } from "./components/validation.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
 import { getUserData, getCards } from "./components/api.js";
 
 const profileElement = document.querySelector(".profile");
@@ -66,6 +66,14 @@ function renderCards(cardsData, userId) {
 function handleProfileEditPopup(options) {
   options.name.value = profileTitle.textContent; // заполняю в попапе редактирования профиля имя и описание
   options.description.value = profileDescription.textContent;
+  clearValidation(formEditProfile, {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_active'
+  });
   openPopup(options.element);
 }
 
